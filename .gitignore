@@ -1,0 +1,12 @@
+# Logs y archivos generados
+logs/
+*.log
+
+# Archivos temporales
+*.tmp
+*.bak
+.DS_Store
+
+# Configuracion local
+.env
+.vscode/
