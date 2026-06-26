@@ -19,54 +19,65 @@ La idea es simular un entorno donde parte de los datos están en un nodo y otra 
 
 El laboratorio utiliza tres máquinas PostgreSQL:
 
-* Nodo principal / gateway: `192.168.1.15`
-* Nodo remoto history: `192.168.1.16`
-* Nodo remoto current: `192.168.1.17`
+- Nodo principal / gateway: `192.168.1.15`
+- Nodo remoto history: `192.168.1.16`
+- Nodo remoto current: `192.168.1.17`
 
 El nodo principal actúa como punto de consulta. Los nodos remotos almacenan parte de la información y se conectan mediante `postgres_fdw`.
 
+## Diagrama de arquitectura
+
+```mermaid
+flowchart LR
+    A[Gateway PostgreSQL<br>192.168.1.15] -->|postgres_fdw| B[History node<br>192.168.1.16]
+    A -->|postgres_fdw| C[Current node<br>192.168.1.17]
+
+    B --> D[(Fragmento de datos)]
+    C --> E[(Fragmento de datos)]
+```
+
 Flujo general:
 
-* El nodo principal no almacena toda la información localmente.
-* Los nodos remotos contienen datos separados.
-* Desde el nodo principal se definen servidores remotos.
-* Se crean user mappings para permitir la autenticación.
-* Se importan o definen foreign tables.
-* Las consultas se lanzan desde el nodo principal, aunque parte de los datos estén en otros servidores.
+- El nodo principal no almacena toda la información localmente.
+- Los nodos remotos contienen datos separados.
+- Desde el nodo principal se definen servidores remotos.
+- Se crean user mappings para permitir la autenticación.
+- Se importan o definen foreign tables.
+- Las consultas se lanzan desde el nodo principal, aunque parte de los datos estén en otros servidores.
 
 > [!TIP]
 > Antes de trabajar con `postgres_fdw`, es importante comprobar que los nodos se ven por red y que PostgreSQL permite conexiones remotas entre ellos. Si la conexión básica falla, las foreign tables tampoco funcionarán.
 
 ## Tecnologías utilizadas
 
-* PostgreSQL
-* Ubuntu Server
-* Base de datos `dvdrental`
-* Extensión `postgres_fdw`
-* SQL
-* SSH
-* Configuración de acceso remoto
-* Foreign servers
-* User mappings
-* Foreign tables
-* Git y GitHub
+- PostgreSQL
+- Ubuntu Server
+- Base de datos `dvdrental`
+- Extensión `postgres_fdw`
+- SQL
+- SSH
+- Configuración de acceso remoto
+- Foreign servers
+- User mappings
+- Foreign tables
+- Git y GitHub
 
 ## Qué se ha trabajado
 
 En la memoria técnica se documenta el proceso completo:
 
-* Preparación de varios servidores PostgreSQL.
-* Configuración de IPs y acceso entre nodos.
-* Ajustes en `postgresql.conf`.
-* Ajustes en `pg_hba.conf`.
-* Asignación de contraseña al usuario `postgres`.
-* Comprobación de conexiones entre máquinas.
-* Creación de la extensión `postgres_fdw`.
-* Creación de servidores remotos desde el nodo principal.
-* Creación de user mappings.
-* Definición de foreign tables.
-* Consultas distribuidas desde el nodo gateway.
-* Comprobación de resultados mediante consultas SQL.
+- Preparación de varios servidores PostgreSQL.
+- Configuración de IPs y acceso entre nodos.
+- Ajustes en `postgresql.conf`.
+- Ajustes en `pg_hba.conf`.
+- Asignación de contraseña al usuario `postgres`.
+- Comprobación de conexiones entre máquinas.
+- Creación de la extensión `postgres_fdw`.
+- Creación de servidores remotos desde el nodo principal.
+- Creación de user mappings.
+- Definición de foreign tables.
+- Consultas distribuidas desde el nodo gateway.
+- Comprobación de resultados mediante consultas SQL.
 
 ## Fragmentación y distribución
 
@@ -76,62 +87,18 @@ En lugar de quedarse solo en la teoría, se configura un entorno donde el nodo p
 
 Esto permite entender mejor conceptos como:
 
-* Fragmentación de datos.
-* Distribución entre nodos.
-* Acceso remoto desde PostgreSQL.
-* Consultas sobre datos externos.
-* Separación lógica entre servidores.
-* Uso de un nodo central como punto de consulta.
-
-## Seguridad y credenciales
-
-En mi entorno local se usaron contraseñas para las máquinas y para PostgreSQL, pero en el repositorio se han sustituido por placeholders.
-
-Ejemplos utilizados en la documentación:
-
-* `CHANGE_ME_VM_PASSWORD`
-* `CHANGE_ME_POSTGRES_PASSWORD`
-
-> [!IMPORTANT]
-> Las credenciales reales no forman parte del repositorio. La documentación mantiene el proceso técnico, pero no deja contraseñas personales publicadas.
-
-## Estructura del repositorio
-
-* `README.md`: presentación general del proyecto.
-* `docs/memoria.md`: documentación técnica completa.
-* `.gitignore`: exclusión de archivos temporales o locales.
-* `.gitattributes`: normalización de saltos de línea.
-
-## Documentación completa
-
-La memoria técnica completa, con comandos, configuración de nodos, consultas SQL y comprobaciones, está en:
-
-`docs/memoria.md`
-
-## Valor técnico del proyecto
-
-Este proyecto es útil para reforzar conocimientos de bases de datos más allá de una instalación local básica.
-
-Trabaja una parte importante de PostgreSQL: la conexión entre servidores y el uso de datos remotos mediante `postgres_fdw`.
-
-## Diagrama de arquitectura
-
-~~~mermaid
-flowchart LR
-    A[Gateway PostgreSQL<br>192.168.1.15] -->|postgres_fdw| B[History node<br>192.168.1.16]
-    A -->|postgres_fdw| C[Current node<br>192.168.1.17]
-
-    B --> D[(Fragmento de datos)]
-    C --> E[(Fragmento de datos)]
-~~~
-
-El nodo principal actúa como punto central de consulta. Los nodos remotos mantienen parte de la información y se exponen al gateway mediante foreign tables.
+- Fragmentación de datos.
+- Distribución entre nodos.
+- Acceso remoto desde PostgreSQL.
+- Consultas sobre datos externos.
+- Separación lógica entre servidores.
+- Uso de un nodo central como punto de consulta.
 
 ## Scripts SQL reproducibles
 
 Además de la memoria técnica, el repositorio incluye una carpeta `sql/` con scripts separados por fases.
 
-~~~text
+```text
 sql/
 |-- README.md
 |-- 01_enable_fdw.sql
@@ -139,9 +106,62 @@ sql/
 |-- 03_create_user_mappings.sql
 |-- 04_import_foreign_schemas.sql
 |-- 05_validation_queries.sql
-~~~
+```
 
 Estos scripts permiten consultar de forma más clara qué pasos son necesarios para preparar el nodo gateway, conectar con los nodos remotos e importar tablas externas mediante `postgres_fdw`.
 
 > [!IMPORTANT]
 > Los scripts usan placeholders para las contraseñas. Antes de ejecutarlos, hay que sustituir `CHANGE_ME_POSTGRES_PASSWORD` por la contraseña local del laboratorio.
+
+## Seguridad y credenciales
+
+En mi entorno local se usaron contraseñas para las máquinas y para PostgreSQL, pero en el repositorio se han sustituido por placeholders.
+
+Ejemplos utilizados en la documentación:
+
+- `CHANGE_ME_VM_PASSWORD`
+- `CHANGE_ME_POSTGRES_PASSWORD`
+
+> [!IMPORTANT]
+> Las credenciales reales no forman parte del repositorio. La documentación mantiene el proceso técnico, pero no deja contraseñas personales publicadas.
+
+## Estructura del repositorio
+
+```text
+database-distribution-fragmentation/
+|-- README.md
+|-- .gitignore
+|-- .gitattributes
+|-- docs/
+|   |-- memoria.md
+|-- sql/
+|   |-- README.md
+|   |-- 01_enable_fdw.sql
+|   |-- 02_create_foreign_servers.sql
+|   |-- 03_create_user_mappings.sql
+|   |-- 04_import_foreign_schemas.sql
+|   |-- 05_validation_queries.sql
+```
+
+## Documentación completa
+
+La memoria técnica completa, con comandos, configuración de nodos, consultas SQL y comprobaciones, está en:
+
+```text
+docs/memoria.md
+```
+
+## Valor técnico del proyecto
+
+Este proyecto es útil para reforzar conocimientos de bases de datos más allá de una instalación local básica.
+
+Trabaja una parte importante de PostgreSQL: la conexión entre servidores y el uso de datos remotos mediante `postgres_fdw`.
+
+Para un perfil junior de sistemas, bases de datos o administración Linux, este repositorio ayuda a mostrar práctica con:
+
+- configuración real de PostgreSQL;
+- trabajo con varios nodos;
+- acceso remoto entre servidores;
+- SQL aplicado;
+- documentación técnica;
+- conceptos de distribución y fragmentación de datos.

@@ -17,22 +17,22 @@ La práctica parte de la base de datos `dvdrental` y se centra en entender cómo
 
 El objetivo principal es construir un entorno distribuido con tres servidores PostgreSQL:
 
-* un nodo principal o gateway;
-* un nodo remoto para datos históricos;
-* un nodo remoto para datos actuales.
+- un nodo principal o gateway;
+- un nodo remoto para datos históricos;
+- un nodo remoto para datos actuales.
 
 Desde el nodo gateway se configuran conexiones hacia los otros nodos mediante `postgres_fdw`. Después se crean tablas foráneas para poder consultar datos remotos como si formasen parte del entorno local.
 
 Con esta práctica se trabajan conceptos como:
 
-* fragmentación de datos;
-* distribución entre nodos;
-* conexión remota entre servidores PostgreSQL;
-* uso de `postgres_fdw`;
-* creación de foreign servers;
-* creación de user mappings;
-* creación o importación de foreign tables;
-* validación mediante consultas SQL.
+- fragmentación de datos;
+- distribución entre nodos;
+- conexión remota entre servidores PostgreSQL;
+- uso de `postgres_fdw`;
+- creación de foreign servers;
+- creación de user mappings;
+- creación o importación de foreign tables;
+- validación mediante consultas SQL.
 
 ---
 
@@ -601,15 +601,15 @@ Durante una práctica de este tipo, los errores más habituales suelen estar rel
 
 Puntos revisados:
 
-* PostgreSQL no escucha en la IP correcta.
-* Falta una regla en `pg_hba.conf`.
-* El gateway no tiene acceso a los nodos remotos.
-* La contraseña del user mapping no coincide.
-* El servidor remoto está mal definido.
-* La base de datos remota no existe.
-* La tabla remota no existe en el esquema indicado.
-* El puerto 5432 no está accesible.
-* No se ha reiniciado PostgreSQL después de cambiar la configuración.
+- PostgreSQL no escucha en la IP correcta.
+- Falta una regla en `pg_hba.conf`.
+- El gateway no tiene acceso a los nodos remotos.
+- La contraseña del user mapping no coincide.
+- El servidor remoto está mal definido.
+- La base de datos remota no existe.
+- La tabla remota no existe en el esquema indicado.
+- El puerto 5432 no está accesible.
+- No se ha reiniciado PostgreSQL después de cambiar la configuración.
 
 Comandos útiles de comprobación:
 
@@ -677,15 +677,15 @@ Esta práctica me ha servido para trabajar PostgreSQL desde una perspectiva más
 
 Los puntos más importantes que demuestra son:
 
-* configuración de varios nodos PostgreSQL;
-* conexión entre servidores;
-* uso de `postgres_fdw`;
-* creación de foreign servers;
-* creación de user mappings;
-* uso de foreign tables;
-* consultas distribuidas;
-* separación de datos entre nodos;
-* documentación técnica del procedimiento;
-* creación de scripts SQL reutilizables.
+- configuración de varios nodos PostgreSQL;
+- conexión entre servidores;
+- uso de `postgres_fdw`;
+- creación de foreign servers;
+- creación de user mappings;
+- uso de foreign tables;
+- consultas distribuidas;
+- separación de datos entre nodos;
+- documentación técnica del procedimiento;
+- creación de scripts SQL reutilizables.
 
 Aunque sigue siendo un laboratorio, se acerca más a un escenario real de administración de bases de datos distribuidas y ayuda a entender cómo PostgreSQL puede consultar información que físicamente se encuentra en otros servidores.
