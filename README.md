@@ -113,3 +113,35 @@ La memoria técnica completa, con comandos, configuración de nodos, consultas S
 Este proyecto es útil para reforzar conocimientos de bases de datos más allá de una instalación local básica.
 
 Trabaja una parte importante de PostgreSQL: la conexión entre servidores y el uso de datos remotos mediante `postgres_fdw`.
+
+## Diagrama de arquitectura
+
+~~~mermaid
+flowchart LR
+    A[Gateway PostgreSQL<br>192.168.1.15] -->|postgres_fdw| B[History node<br>192.168.1.16]
+    A -->|postgres_fdw| C[Current node<br>192.168.1.17]
+
+    B --> D[(Fragmento de datos)]
+    C --> E[(Fragmento de datos)]
+~~~
+
+El nodo principal actúa como punto central de consulta. Los nodos remotos mantienen parte de la información y se exponen al gateway mediante foreign tables.
+
+## Scripts SQL reproducibles
+
+Además de la memoria técnica, el repositorio incluye una carpeta `sql/` con scripts separados por fases.
+
+~~~text
+sql/
+|-- README.md
+|-- 01_enable_fdw.sql
+|-- 02_create_foreign_servers.sql
+|-- 03_create_user_mappings.sql
+|-- 04_import_foreign_schemas.sql
+|-- 05_validation_queries.sql
+~~~
+
+Estos scripts permiten consultar de forma más clara qué pasos son necesarios para preparar el nodo gateway, conectar con los nodos remotos e importar tablas externas mediante `postgres_fdw`.
+
+> [!IMPORTANT]
+> Los scripts usan placeholders para las contraseñas. Antes de ejecutarlos, hay que sustituir `CHANGE_ME_POSTGRES_PASSWORD` por la contraseña local del laboratorio.
