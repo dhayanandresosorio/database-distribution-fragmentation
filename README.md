@@ -157,7 +157,7 @@ Este proyecto es útil para reforzar conocimientos de bases de datos más allá 
 
 Trabaja una parte importante de PostgreSQL: la conexión entre servidores y el uso de datos remotos mediante `postgres_fdw`.
 
-Para un perfil junior de sistemas, bases de datos o administración Linux, este repositorio ayuda a mostrar práctica con:
+Con este proyecto, he podido trabajar y aprender sobre lo siguiente:
 
 - configuración real de PostgreSQL;
 - trabajo con varios nodos;
